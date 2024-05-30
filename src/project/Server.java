@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -75,6 +77,7 @@ public class Server {
 			mainBoard.append(log);
 			fileWriter.write(log);
 			fileWriter.flush();
+			serverFrame.autoScrollPane();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -110,10 +113,6 @@ public class Server {
 		private BufferedReader reader;
 		// private PrintWriter writer;
 		private BufferedWriter writer;
-
-//		public BufferedWriter getWriter() {
-//			return writer;
-//		}
 
 		private String id;
 
@@ -195,9 +194,13 @@ public class Server {
 		@Override
 		public void chatting() {
 			serverViewAppendWriter(from + " : " + message + "\n");
+			
+			SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
+	        String nowTime = formatTime.format(new Date());
+	        
 			for (int i = 0; i < connectedUsers.size(); i++) {
 				ConnectedUser user = connectedUsers.elementAt(i);
-				user.writer("Chatting/" + id + "/"+ message);
+				user.writer("Chatting/" + "[ "+nowTime + " ]   "+ id + "/"+ message );
 			}			
 		}
 		

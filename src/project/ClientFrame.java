@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -31,8 +32,8 @@ public class ClientFrame extends JFrame {
 	private JButton connectbtn;
 
 	private JTextArea mainMessageBox;
-	private	ScrollPane messageBoxScrollPane;
-
+	private	JScrollPane messageBoxScrollPane;
+	
 	private JTextField textArea;
 	private JButton sendbtn;
 	
@@ -68,7 +69,7 @@ public class ClientFrame extends JFrame {
 		connectbtn = new JButton("연결 하기");
 
 		mainMessageBox = new JTextArea();
-		messageBoxScrollPane = new ScrollPane();
+		messageBoxScrollPane = new JScrollPane();
 
 		textArea = new JTextField();
 		sendbtn = new JButton("전송");
@@ -91,26 +92,27 @@ public class ClientFrame extends JFrame {
 		backgroundPanel.setLayout(null);
 		add(backgroundPanel);
 
-		ipTextField.setBounds(2, 2, 100, 28);
+		ipTextField.setBounds(0, 1, 101, 28);
 		ipTextField.setText("127.0.0.1");
 		backgroundPanel.add(ipTextField);
-		portTextField.setBounds(102, 2, 100, 28);
+		portTextField.setBounds(102, 1, 100, 28);
 		portTextField.setText("5151");
 		backgroundPanel.add(portTextField);
-		idTextField.setBounds(202, 2, 100, 28);
+		idTextField.setBounds(202, 1, 100, 28);
 		idTextField.setText("닉네임");
 		backgroundPanel.add(idTextField);
-		connectbtn.setBounds(302, 2, 100, 28);
+		connectbtn.setBounds(302, 1, 100, 28);
 		backgroundPanel.add(connectbtn);
 
 		mainMessageBox.setEditable(false);
 		mainMessageBox.setForeground(Color.black);
-		mainMessageBox.setSize(400,247);
-		messageBoxScrollPane.add(mainMessageBox);
-		messageBoxScrollPane.setBounds(2, 30, 400, 247);
+		messageBoxScrollPane.setViewportView(mainMessageBox);
+		messageBoxScrollPane.setBounds(0, 30, 402, 247);
+	
 		backgroundPanel.add(messageBoxScrollPane);
+		
 
-		textArea.setBounds(2, 278, 400, 30);
+		textArea.setBounds(0, 278, 402, 30);
 		backgroundPanel.add(textArea);
 		sendbtn.setBounds(402, 278, 81, 30);
 		backgroundPanel.add(sendbtn);
@@ -160,12 +162,14 @@ public class ClientFrame extends JFrame {
 		sendbtn.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				sendMessage();
+				messageBoxScrollPane.getVerticalScrollBar().setValue(messageBoxScrollPane.getVerticalScrollBar().getMaximum());
 			}
 		});
 		textArea.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					sendMessage();
+					messageBoxScrollPane.getVerticalScrollBar().setValue(messageBoxScrollPane.getVerticalScrollBar().getMaximum());
 				}
 			}
 		});

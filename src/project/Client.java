@@ -7,6 +7,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -19,8 +23,6 @@ public class Client implements CallBackClientService, ProtocolImpl {
 	private JList<String> userList;
 	private Vector<String> userIdList = new Vector<>();
 
-	Server server;
-	
 	private ClientFrame clientFrame;
 
 	private JTextArea mainMessageBox;
@@ -33,21 +35,19 @@ public class Client implements CallBackClientService, ProtocolImpl {
 	private String ip;
 	private int port;
 	private String id;
-	
+
 	private String protocol;
 	private String from;
 	private String message;
 
-
 	public Client() {
 		clientFrame = new ClientFrame(this);
-		
+
 		mainMessageBox = clientFrame.getMainMessageBox();
-		
+
 		userList = clientFrame.getUserList();
 	}
-	
-	
+
 	private void checkProtocol(String msg) {
 		StringTokenizer tokenizer = new StringTokenizer(msg, "/");
 
@@ -56,7 +56,7 @@ public class Client implements CallBackClientService, ProtocolImpl {
 
 		if (protocol.equals("ConnectedUser")) {
 			connectedUser();
-		} else if(protocol.equals("UserOut")) {
+		} else if (protocol.equals("UserOut")) {
 			userIdList.remove(from);
 			userList.setListData(userIdList);
 			outRoom();
@@ -69,12 +69,12 @@ public class Client implements CallBackClientService, ProtocolImpl {
 			newUser();
 		}
 	}
-	
+
 	private void connectNetwork() {
-		
+
 		try {
 			socket = new Socket(ip, port);
-			
+
 		} catch (UnknownHostException e) {
 		} catch (IOException e) {
 			clickOutRoomBtn();
@@ -115,7 +115,7 @@ public class Client implements CallBackClientService, ProtocolImpl {
 		try {
 			connectNetwork();
 			connetIO();
-			
+
 			writer.write(id.trim() + "\n");
 			writer.flush();
 
@@ -135,31 +135,31 @@ public class Client implements CallBackClientService, ProtocolImpl {
 
 	@Override
 	public void clickSendMessageBtn(String messageText) {
-		writer("Chatting/" + id +"/"+ messageText);
+		writer("Chatting/" + id + "/" + messageText);
 	}
 
 	@Override
 	public void clickOutRoomBtn() {
 		writer("OutRoom/" + id);
 	}
-	
+
 	@Override
 	public void clickEnterRoomBtn() {
-		writer("EnterRoom/"+ id);
+		writer("EnterRoom/" + id);
 	}
-	
+
 	@Override
 	public void chatting() {
-			mainMessageBox.append(from + " : " +message+"\n");
-	} 
+		mainMessageBox.append(from + " ∶ " + message + "\n");
+	}
 
 	@Override
 	public void newUser() {
-		if(!from.equals(this.id)) {
+		if (!from.equals(this.id)) {
 			userIdList.add(from);
 			userList.setListData(userIdList);
 		}
-		
+
 	}
 
 	@Override
@@ -167,28 +167,19 @@ public class Client implements CallBackClientService, ProtocolImpl {
 		userIdList.add(from);
 		userList.setListData(userIdList);
 	}
-	
+
 	@Override
 	public void outRoom() {
 		mainMessageBox.append(from + "님이 나가셨습니다.\n");
 	}
-	
+
 	@Override
 	public void enterRoom() {
 		mainMessageBox.append(from + "님이 입장하셨습니다.\n");
 	}
-	
+
 	public static void main(String[] args) {
 		new Client();
 	}
-
-
-
-
-
-
-
-
-
 
 }

@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -19,7 +20,7 @@ public class ServerFrame extends JFrame {
 
 	private Server mContext;
 
-	private ScrollPane scrollPane; // UI 들의 칸이 부족하면 위아래로 스크롤을 제공해준다.
+	private JScrollPane scrollPane; // UI 들의 칸이 부족하면 위아래로 스크롤을 제공해준다.
 
 	// 백그라운드 패널
 	private BackgroundPanel backgroundPanel;
@@ -39,6 +40,17 @@ public class ServerFrame extends JFrame {
 		setInitLayout();
 		addEventListener();
 	}
+
+	
+	public void autoScrollPane() {
+		scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+	}
+
+
+	public void setScrollPane(JScrollPane scrollPane) {
+		this.scrollPane = scrollPane;
+	}
+
 
 	public JTextArea getMainBoard() {
 		return mainBoard;
@@ -60,7 +72,7 @@ public class ServerFrame extends JFrame {
 		mainPanel = new JPanel();
 		mainBoard = new JTextArea();
 
-		scrollPane = new ScrollPane();
+		scrollPane = new JScrollPane();
 
 		// 포트 패널
 		portPanel = new JPanel();
@@ -99,9 +111,9 @@ public class ServerFrame extends JFrame {
 		mainPanel.setBackground(new Color(0, 0, 0, 0)); // 메인패널 투명
 		mainPanel.add(scrollPane); // 메인 패널 위에 스크롤페인 생성
 
-		scrollPane.setBounds(45, 100, 300, 290);
-		scrollPane.add(mainBoard); // mainBoard = JTextArea
-		backgroundPanel.add(mainPanel); // 백그라운드패널위에 메인패널 생성
+		scrollPane.setBounds(45, 150, 300, 290);
+		scrollPane.setViewportView(mainBoard); // mainBoard = JTextArea
+		backgroundPanel.add(scrollPane); // 백그라운드패널위에 메인패널 생성
 
 		setVisible(true);
 	}

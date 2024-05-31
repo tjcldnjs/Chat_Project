@@ -3,7 +3,8 @@ package project;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.ScrollPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -13,13 +14,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 public class ServerFrame extends JFrame {
 
 	private Server mContext;
-
+	private CallBackServerService callBackService;
 	private JScrollPane scrollPane; // UI 들의 칸이 부족하면 위아래로 스크롤을 제공해준다.
 
 	// 백그라운드 패널
@@ -31,10 +33,12 @@ public class ServerFrame extends JFrame {
 
 	// 포트패널
 	private JPanel portPanel;
+	private JTextField portTextField;
 	private JButton connectBtn;
 	private JButton deconnectBtn;
 
 	public ServerFrame(Server mContext) {
+		callBackService = mContext;
 		this.mContext = mContext;
 		initData();
 		setInitLayout();
@@ -45,12 +49,6 @@ public class ServerFrame extends JFrame {
 	public void autoScrollPane() {
 		scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
 	}
-
-
-	public void setScrollPane(JScrollPane scrollPane) {
-		this.scrollPane = scrollPane;
-	}
-
 
 	public JTextArea getMainBoard() {
 		return mainBoard;
@@ -76,6 +74,7 @@ public class ServerFrame extends JFrame {
 
 		// 포트 패널
 		portPanel = new JPanel();
+		portTextField = new JTextField(6);
 		connectBtn = new JButton("서버 열기");
 		deconnectBtn = new JButton("서버 끄기");
 	}
@@ -96,6 +95,8 @@ public class ServerFrame extends JFrame {
 		// 포트패널 컴포넌트
 		portPanel.setBounds(25, 80, 350, 50); // 절대위치와 크기지정 (지정된 x,y 위치로부터의 크기)
 		portPanel.setBackground(new Color(0, 0, 0, 0)); // (r,g,b,a(alpha 투명도))
+		portTextField.setText("PORT 입력");
+		portPanel.add(portTextField);
 		portPanel.add(connectBtn); // 포트패널 위에 커넥트버튼 생성
 		portPanel.add(deconnectBtn);
 		backgroundPanel.add(portPanel); // 백그라운드패널 위에 포트패널 생성
@@ -118,6 +119,14 @@ public class ServerFrame extends JFrame {
 		setVisible(true);
 	}
 
+	private void clickServerOnBtn() {
+		if(!portTextField.getText().equals(null)) {
+			String stringPort = portTextField.getText();
+			int port = Integer.parseInt(stringPort);
+			
+			callBackService.clickConnectServerBtn(port);
+		}
+	}
 	public void addEventListener() {
 		// 필요한 메서드만 사용하기위해 -> MouseListener 보다 MouseAdapter 사용
 		connectBtn.addMouseListener(new MouseAdapter() {
@@ -125,8 +134,7 @@ public class ServerFrame extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				super.mouseClicked(e);
-				mContext.startServer();
-
+				clickServerOnBtn();
 			}
 		});
 
@@ -136,6 +144,12 @@ public class ServerFrame extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				super.mouseClicked(e);
 				mContext.stopServer();
+			}
+		});
+		portTextField.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				super.mouseClicked(e);
+				portTextField.setText("");
 			}
 		});
 	}

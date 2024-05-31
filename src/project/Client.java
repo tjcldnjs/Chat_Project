@@ -7,16 +7,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+
 
 public class Client implements CallBackClientService, ProtocolImpl {
 
@@ -151,6 +148,7 @@ public class Client implements CallBackClientService, ProtocolImpl {
 	@Override
 	public void chatting() {
 		mainMessageBox.append(from + " ∶ " + message + "\n");
+		clientFrame.autoScrollPane();
 	}
 
 	@Override

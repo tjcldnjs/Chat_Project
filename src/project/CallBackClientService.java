@@ -9,6 +9,4 @@ public interface CallBackClientService {
 	
 	void clickEnterRoomBtn();
 
-
-
 }

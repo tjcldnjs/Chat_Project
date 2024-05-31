@@ -57,6 +57,7 @@ public class ClientFrame extends JFrame {
 		initData();
 		setInitLayout();
 		addEventListener();
+		connectbtn.addMouseListener(connectBtnMouseListener); 
 	}
 	
 
@@ -93,13 +94,13 @@ public class ClientFrame extends JFrame {
 		add(backgroundPanel);
 
 		ipTextField.setBounds(0, 1, 101, 28);
-		ipTextField.setText("127.0.0.1");
+		ipTextField.setText("IP 입력");
 		backgroundPanel.add(ipTextField);
 		portTextField.setBounds(102, 1, 100, 28);
-		portTextField.setText("5151");
+		portTextField.setText("PORT 입력");
 		backgroundPanel.add(portTextField);
 		idTextField.setBounds(202, 1, 100, 28);
-		idTextField.setText("닉네임");
+		idTextField.setText("ID 입력");
 		backgroundPanel.add(idTextField);
 		connectbtn.setBounds(302, 1, 100, 28);
 		backgroundPanel.add(connectbtn);
@@ -123,10 +124,14 @@ public class ClientFrame extends JFrame {
 		userList.setBounds(403,30,80,247);
 		
 		backgroundPanel.add(userList);
-		//
+		
 		setVisible(true);
 	}
 
+	public void autoScrollPane() {
+		messageBoxScrollPane.getVerticalScrollBar().setValue(messageBoxScrollPane.getVerticalScrollBar().getMaximum());
+	}
+	
 	private void clickConnectBtn() {
 		if ((!ipTextField.getText().equals(null)) && (!portTextField.getText().equals(null))
 				&& (!idTextField.getText().equals(null))) {
@@ -137,6 +142,8 @@ public class ClientFrame extends JFrame {
 			String id = idTextField.getText();
 
 			callBackService.clickConnectServerBtn(ip, port, id);
+	        connectbtn.setEnabled(false); // 연결 버튼 비활성화
+	        connectbtn.removeMouseListener(connectBtnMouseListener);
 		} else {
 			JOptionPane.showMessageDialog(null, "입력한 정보를 확인하세요", "알림", JOptionPane.INFORMATION_MESSAGE);
 		}
@@ -151,26 +158,48 @@ public class ClientFrame extends JFrame {
 		}
 	}
 
+	private MouseAdapter connectBtnMouseListener = new MouseAdapter() {
+	    public void mousePressed(MouseEvent e) {
+	        clickConnectBtn();
+	        mContext.clickEnterRoomBtn();
+	    }
+	};
 	private void addEventListener() {
-		connectbtn.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				clickConnectBtn();
-				mContext.clickEnterRoomBtn();
-				
-			}
-		});
+//		connectbtn.addMouseListener (new MouseAdapter () {
+//			public void mousePressed(MouseEvent e) {
+//				clickConnectBtn();
+//				mContext.clickEnterRoomBtn();
+//				
+//			}
+//		});
 		sendbtn.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				sendMessage();
-				messageBoxScrollPane.getVerticalScrollBar().setValue(messageBoxScrollPane.getVerticalScrollBar().getMaximum());
 			}
 		});
 		textArea.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					sendMessage();
-					messageBoxScrollPane.getVerticalScrollBar().setValue(messageBoxScrollPane.getVerticalScrollBar().getMaximum());
 				}
+			}
+		});
+		
+		ipTextField.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				ipTextField.setText("");
+			}
+		});
+		
+		portTextField.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				portTextField.setText("");
+			}
+		});
+		
+		idTextField.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				idTextField.setText("");
 			}
 		});
 	}

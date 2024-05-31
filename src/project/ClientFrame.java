@@ -161,6 +161,7 @@ public class ClientFrame extends JFrame {
 	private MouseAdapter connectBtnMouseListener = new MouseAdapter() {
 	    public void mousePressed(MouseEvent e) {
 	        clickConnectBtn();
+	        connectbtn.setText("연결 성공");
 	        mContext.clickEnterRoomBtn();
 	    }
 	};

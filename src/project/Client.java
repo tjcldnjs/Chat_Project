@@ -118,9 +118,8 @@ public class Client implements CallBackClientService, ProtocolImpl {
 
 		} catch (Exception e) {
 		}
-
 	}
-
+	
 	private void writer(String str) {
 		try {
 			writer.write(str + "\n");
@@ -144,7 +143,7 @@ public class Client implements CallBackClientService, ProtocolImpl {
 	public void clickEnterRoomBtn() {
 		writer("EnterRoom/" + id);
 	}
-
+	
 	@Override
 	public void chatting() {
 		mainMessageBox.append(from + " ∶ " + message + "\n");

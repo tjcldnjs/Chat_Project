@@ -22,7 +22,7 @@ public class Client implements CallBackClientService, ProtocolImpl {
 
 	private ClientFrame clientFrame;
 
-	private JTextArea mainMessageBox;
+	public JTextArea mainMessageBox;
 
 	private Socket socket;
 

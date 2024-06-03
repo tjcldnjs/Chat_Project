@@ -22,6 +22,7 @@ public class Server implements CallBackServerService{
 	private ServerFrame serverFrame;
 
 	private JTextArea mainBoard;
+	Client client;
 
 	private ServerSocket serverSocket;
 	private Socket socket;
@@ -57,10 +58,12 @@ public class Server implements CallBackServerService{
 		try {
 			serverSocket.close();
 			serverViewAppendWriter("서버종료\n");
+			client.mainMessageBox.append("서버가 종료 되었습니다.");
 			serverFrame.getConnectBtn().setEnabled(true);
 			serverFrame.getDeConnectBtn().setEnabled(false);
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "서버가 종료 되었습니다.", "알림", JOptionPane.ERROR_MESSAGE);
+//			JOptionPane.showMessageDialog(null, "서버가 종료 되었습니다.", "알림", JOptionPane.ERROR_MESSAGE);
+			
 		}
 	}
 
